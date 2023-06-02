@@ -2,3 +2,24 @@ body {
     background-image: url(../images/background.jpg);
     background-size: cover;
 }
+
+h1 {
+    text-align: center;
+    margin-top: 8%;
+    font-size: 350%;
+    font-family:'Courier New', monospace;
+    font-weight: bold;
+    color: white;
+    text-shadow: 10px 5px 10px black;
+}
+
+.form-control {
+    width: 20%;
+    margin-left: auto;
+    margin-right: auto;
+}
+
+.btn.btn-info {
+    margin-left: auto;
+    margin-right: auto;
+}

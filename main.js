@@ -1,14 +1,30 @@
-const settings = {
-	async: true,
-	crossDomain: true,
-	url: 'https://weatherapi-com.p.rapidapi.com/current.json?q=53.1%2C-0.13',
-	method: 'GET',
-	headers: {
-		'X-RapidAPI-Key': '5c7230971cmshb656511d1a5e536p1ae900jsnc1d3e25a70b2',
-		'X-RapidAPI-Host': 'weatherapi-com.p.rapidapi.com'
-	}
-};
+$(function () {
+    
+    $('#searchBtn').click(function() {
+        var city = $('#cityInput').val();
 
-$.ajax(settings).done(function (response) {
-	console.log(response);
+        // Make the API request
+        $.ajax({
+            url: 'https://api.openweathermap.org/data/2.5/weather',
+            dataType: 'json',
+            type: 'GET',
+            data: {
+                q: city,
+                appid: 'YOUR_API_KEY' // Replace with your OpenWeatherMap API key
+            },
+            success: function(data) {
+                // Process the response data
+                var temperature = Math.round(data.main.temp - 273.15); // Convert temperature to Celsius
+                var weatherDescription = data.weather[0].description;
+
+                // Display the weather information
+                var weatherText = 'Temperature: ' + temperature + '°C<br>' +
+                    'Description: ' + weatherDescription;
+                $('#weatherContainer').html(weatherText);
+            },
+            error: function(xhr, status, error) {
+                console.log('Error:', error);
+            }
+        });
+    });
 });
