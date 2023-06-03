@@ -1,6 +1,7 @@
 body {
     background-image: url(../images/background.jpg);
     background-size: cover;
+    background-attachment: fixed;
 }
 
 h1 {
@@ -25,7 +26,7 @@ h1 {
 }
 
 #idojarasHelye {
-    color: darkblue;
+    color: rgb(48, 113, 113);
 }
 
 .card {
@@ -33,5 +34,10 @@ h1 {
     margin: auto;
     padding-left: 20px;
     padding-right: 15px;
+    background-color: rgb(255, 255, 255, 0.75);
+    text-shadow: 0px 3px 5px darkgray;
 }
 
+#varosInput {
+    background-color: rgb(255, 255, 255, 0.75);
+}
