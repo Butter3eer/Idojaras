@@ -1,30 +1,53 @@
 $(function () {
-    
-    $('#searchBtn').click(function() {
-        var city = $('#cityInput').val();
+    $("#kereses").click(function (e) {
+        var varos = $('#varosInput').val();
+        var api_key = 'f08721b7c8c370a65078d1471b7ce45c';
+        var geocodingUrl = 'http://api.openweathermap.org/geo/1.0/direct?q=' + varos + '&appid=' + api_key;
 
-        // Make the API request
         $.ajax({
-            url: 'https://api.openweathermap.org/data/2.5/weather',
-            dataType: 'json',
-            type: 'GET',
-            data: {
-                q: city,
-                appid: 'YOUR_API_KEY' // Replace with your OpenWeatherMap API key
+            url: geocodingUrl,
+            method: 'GET',
+            success: function(geocodingData) {
+              var latitude = geocodingData[0].lat;
+              var longitude = geocodingData[0].lon;
+    
+              var weatherUrl = 'https://api.openweathermap.org/data/2.5/weather?lat=' + latitude + '&lon=' + longitude + '&appid=' + api_key;
+      
+              $.ajax({
+                url: weatherUrl,
+                method: 'GET',
+                success: function(weatherData) {
+                    console.log(weatherData);
+                  Kiir(weatherData);
+                },
+                error: function() {
+                  $('#idojarasHelye').text('Sikertelen adatbetöltés.');
+                }
+              });
             },
-            success: function(data) {
-                // Process the response data
-                var temperature = Math.round(data.main.temp - 273.15); // Convert temperature to Celsius
-                var weatherDescription = data.weather[0].description;
-
-                // Display the weather information
-                var weatherText = 'Temperature: ' + temperature + '°C<br>' +
-                    'Description: ' + weatherDescription;
-                $('#weatherContainer').html(weatherText);
-            },
-            error: function(xhr, status, error) {
-                console.log('Error:', error);
+            error: function() {
+              $('#idojarasHelye').text('Sikertelen adatbetöltés.');
             }
         });
+        $("#varosInput").val("");
     });
 });
+
+function Kiir(data) {
+    var varosNeve = data.name;
+    var homerseklet = (data.main.temp - 273.15).toFixed(1);
+    var erzes = (data.main.feels_like - 273.15).toFixed(1);
+    var para = data.main.humidity;
+    var szel = data.wind.speed;
+    var leiras = data.weather[0].description;
+    var icon = data.weather[0].icon;
+    var iconUrl = 'http://openweathermap.org/img/w/' + icon + '.png';
+
+    var idojarasHTML = `<h2>${varosNeve}<img src="${iconUrl}" alt="Weather Icon"></h2>
+                        <p><strong>Hőmérséklet:</strong> ${homerseklet} C°</p>
+                        <p><strong>Érződik:</strong> ${erzes} C°</p>
+                        <p><strong>Pára:</strong> ${para}</p>
+                        <p><strong>Szél:</strong> ${szel} csomó</p>
+                        <p><strong>Leírás:</strong> ${leiras}</p>`;
+    $('#idojarasHelye').html(idojarasHTML);
+}
